@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - include:
+      file: db\changelog\changelog-2020-10-19T10-37-28Z.yml
+  - include:
+      file: db\changelog\changelog-2020-10-20T08-18-02Z.yml
+  - include:
+      file: db\changelog\changelog-2020-10-20T08-33-55Z.yml
+  - include:
+      file: db\changelog\changelog-2020-10-22T17-51-10Z.yml
+  - include:
+      file: db\changelog\changelog-2020-10-26T20-45-34Z.yml

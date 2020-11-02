@@ -1,0 +1,22 @@
+databaseChangeLog:
+- changeSet:
+    id: 1603182844034-1
+    author: Ar2r (generated)
+    changes:
+    - addColumn:
+        columns:
+        - column:
+            name: c_creation_date_time
+            type: timestamp
+        tableName: t_users
+- changeSet:
+    id: 1603182844034-2
+    author: Ar2r (generated)
+    changes:
+    - addColumn:
+        columns:
+        - column:
+            name: c_update_date_time
+            type: timestamp
+        tableName: t_users
+

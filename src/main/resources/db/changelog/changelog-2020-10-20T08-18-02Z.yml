@@ -1,0 +1,29 @@
+databaseChangeLog:
+- changeSet:
+    id: 1603181891948-1
+    author: Ar2r (generated)
+    changes:
+    - addNotNullConstraint:
+        columnDataType: varchar(255)
+        columnName: c_email
+        tableName: t_users
+        validate: true
+- changeSet:
+    id: 1603181891948-2
+    author: Ar2r (generated)
+    changes:
+    - addNotNullConstraint:
+        columnDataType: varchar(255)
+        columnName: c_first_name
+        tableName: t_users
+        validate: true
+- changeSet:
+    id: 1603181891948-3
+    author: Ar2r (generated)
+    changes:
+    - addNotNullConstraint:
+        columnDataType: varchar(255)
+        columnName: c_last_name
+        tableName: t_users
+        validate: true
+

@@ -1,0 +1,20 @@
+databaseChangeLog:
+- changeSet:
+    id: 1603389075679-1
+    author: Ar2r (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: t_bootstrapentriesPK
+            name: c_id
+            type: BIGINT
+        - column:
+            name: c_label
+            type: INTEGER
+        tableName: t_bootstrapentries
+

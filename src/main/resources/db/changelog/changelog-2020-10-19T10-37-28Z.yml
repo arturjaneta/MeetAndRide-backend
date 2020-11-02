@@ -1,0 +1,82 @@
+databaseChangeLog:
+- changeSet:
+    id: 1603103856924-1
+    author: Ar2r (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: t_tokensPK
+            name: c_id
+            type: BIGINT
+        - column:
+            name: c_hashed_token
+            type: VARCHAR(255)
+        tableName: t_tokens
+- changeSet:
+    id: 1603103856924-2
+    author: Ar2r (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: t_usersPK
+            name: c_id
+            type: BIGINT
+        - column:
+            name: c_email
+            type: VARCHAR(255)
+        - column:
+            name: c_first_name
+            type: VARCHAR(255)
+        - column:
+            name: c_is_active
+            type: BOOLEAN
+        - column:
+            name: c_last_name
+            type: VARCHAR(255)
+        - column:
+            name: c_password
+            type: VARCHAR(255)
+        - column:
+            name: c_refresh_token_id
+            type: BIGINT
+        tableName: t_users
+- changeSet:
+    id: 1603103856924-3
+    author: Ar2r (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: c_email
+        constraintName: UC_T_USERSC_EMAIL_COL
+        tableName: t_users
+- changeSet:
+    id: 1603103856924-4
+    author: Ar2r (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: c_refresh_token_id
+        constraintName: UC_T_USERSC_REFRESH_TOKEN_ID_COL
+        tableName: t_users
+- changeSet:
+    id: 1603103856924-5
+    author: Ar2r (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: c_refresh_token_id
+        baseTableName: t_users
+        constraintName: FKiukhgrgvuexwc4rt81a3uxo9y
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: c_id
+        referencedTableName: t_tokens
+        validate: true
+

@@ -1,0 +1,30 @@
+databaseChangeLog:
+- changeSet:
+    id: 1603745143375-3
+    author: Ar2r (generated)
+    changes:
+    - addColumn:
+        columns:
+        - column:
+            name: c_phone_number
+            type: varchar(255)
+        tableName: t_users
+- changeSet:
+    id: 1603745143375-1
+    author: Ar2r (generated)
+    changes:
+    - addNotNullConstraint:
+        columnDataType: timestamp
+        columnName: c_creation_date_time
+        tableName: t_users
+        validate: true
+- changeSet:
+    id: 1603745143375-2
+    author: Ar2r (generated)
+    changes:
+    - addNotNullConstraint:
+        columnDataType: timestamp
+        columnName: c_update_date_time
+        tableName: t_users
+        validate: true
+
