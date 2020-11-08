@@ -28,7 +28,7 @@ public class UserServiceTest {
 
     @Test
     void shouldRegisterUserSuccessfully(){
-        final RegisterDTO registerDTO = new RegisterDTO("firstName","lastName","test@test.pl","test","123456789");
+        final RegisterDTO registerDTO = new RegisterDTO("firstName","lastName","test@test.pl","test");
 
         given(userRepository.existsByEmail(registerDTO.getEmail())).willReturn(false);
         given(userRepository.save(any(User.class))).willAnswer(invocation -> invocation.getArgument(0));
@@ -39,13 +39,12 @@ public class UserServiceTest {
         assertEquals(registerDTO.getLastName(), result.getLastName());
         assertEquals(registerDTO.getEmail(), result.getEmail());
         assertNotNull(result.getPassword());
-        assertEquals(registerDTO.getPhoneNumber(), result.getPhoneNumber());
         verify(userRepository,times(1)).save(any(User.class));
     }
 
     @Test
     void shouldThrowEmailAlreadyTakenException(){
-        final RegisterDTO registerDTO = new RegisterDTO("firstName","lastName","test@test.pl","test","123456789");
+        final RegisterDTO registerDTO = new RegisterDTO("firstName","lastName","test@test.pl","test");
         given(userRepository.existsByEmail(registerDTO.getEmail())).willReturn(true);
 
         assertThrows(EmailAlreadyTakenException.class,() -> {

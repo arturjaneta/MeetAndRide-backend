@@ -12,6 +12,7 @@ import javax.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -24,7 +25,7 @@ public class User extends DatedEntity implements UserDetails {
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @Column(name = "password")
+    @Column(name = "password",nullable = false)
     private String password;
 
     @Column(name = "first_name", nullable = false)
@@ -33,11 +34,23 @@ public class User extends DatedEntity implements UserDetails {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(name = "is_active")
+    @Column(name = "is_active", nullable = false)
     private boolean isActive = true;
 
-    @Column(name = "phone_number")
-    private String phoneNumber;
+    @Column(name = "is_admin", nullable = false)
+    private boolean isAdmin = false;
+
+    @OneToMany(mappedBy = "owner")
+    private Set<Motorcycle> motorcycles = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "author")
+    private Set<ChatEntry> chatEntries = new LinkedHashSet<>();
+
+    @ManyToMany(mappedBy = "participants")
+    private Set<Trip> tripsAsParticipant = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "owner")
+    private Set<Trip> tripsAsOwner = new LinkedHashSet<>();
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "refreshToken_id",

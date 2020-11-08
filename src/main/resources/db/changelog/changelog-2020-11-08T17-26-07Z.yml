@@ -1,0 +1,291 @@
+databaseChangeLog:
+- changeSet:
+    id: 1604856376718-3
+    author: Ar2r (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: t_chat_entriesPK
+            name: c_id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: c_content
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: c_date
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            constraints:
+              nullable: false
+            name: c_author
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: c_trip
+            type: BIGINT
+        tableName: t_chat_entries
+- changeSet:
+    id: 1604856376718-4
+    author: Ar2r (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: t_motorcyclesPK
+            name: c_id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: c_brand_name
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: c_capacity
+            type: INTEGER
+        - column:
+            constraints:
+              nullable: false
+            name: c_model_name
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: c_power
+            type: INTEGER
+        - column:
+            constraints:
+              nullable: false
+            name: c_registration_number
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: c_year
+            type: INTEGER
+        - column:
+            constraints:
+              nullable: false
+            name: c_owner
+            type: BIGINT
+        tableName: t_motorcycles
+- changeSet:
+    id: 1604856376718-5
+    author: Ar2r (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: c_trip_id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: c_user_id
+            type: BIGINT
+        tableName: t_trip_participants
+- changeSet:
+    id: 1604856376718-6
+    author: Ar2r (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: t_tripsPK
+            name: c_id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: c_creation_date_time
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            constraints:
+              nullable: false
+            name: c_update_date_time
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            constraints:
+              nullable: false
+            name: c_description
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: c_from_date
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            constraints:
+              nullable: false
+            name: c_from_place
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: c_speed
+            type: INTEGER
+        - column:
+            constraints:
+              nullable: false
+            name: c_title
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: c_to_date
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            constraints:
+              nullable: false
+            name: c_to_place
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: c_trace
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: c_owner
+            type: BIGINT
+        tableName: t_trips
+- changeSet:
+    id: 1604856376718-7
+    author: Ar2r (generated)
+    changes:
+    - addColumn:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: c_is_admin
+            type: boolean
+        tableName: t_users
+- changeSet:
+    id: 1604856376718-8
+    author: Ar2r (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: c_trip
+        baseTableName: t_chat_entries
+        constraintName: FKa588q79pyw8tfwm5cvsk8lxcf
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: c_id
+        referencedTableName: t_trips
+        validate: true
+- changeSet:
+    id: 1604856376718-9
+    author: Ar2r (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: c_owner
+        baseTableName: t_trips
+        constraintName: FKi82i2o2pbmvb89jvvjfjpwhvv
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: c_id
+        referencedTableName: t_users
+        validate: true
+- changeSet:
+    id: 1604856376718-10
+    author: Ar2r (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: c_author
+        baseTableName: t_chat_entries
+        constraintName: FKj8u4lorj38spa1j9pqf6ftu8m
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: c_id
+        referencedTableName: t_users
+        validate: true
+- changeSet:
+    id: 1604856376718-11
+    author: Ar2r (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: c_owner
+        baseTableName: t_motorcycles
+        constraintName: FKjup174wd6j17enj375eiaidvu
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: c_id
+        referencedTableName: t_users
+        validate: true
+- changeSet:
+    id: 1604856376718-12
+    author: Ar2r (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: c_user_id
+        baseTableName: t_trip_participants
+        constraintName: FKqbkefe5adggexk6a7mk8h0d0q
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: c_id
+        referencedTableName: t_users
+        validate: true
+- changeSet:
+    id: 1604856376718-13
+    author: Ar2r (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: c_trip_id
+        baseTableName: t_trip_participants
+        constraintName: FKrkqjr8h8wbtfxgpctj02besl2
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: c_id
+        referencedTableName: t_trips
+        validate: true
+- changeSet:
+    id: 1604856376718-14
+    author: Ar2r (generated)
+    changes:
+    - dropColumn:
+        columnName: c_phone_number
+        tableName: t_users
+- changeSet:
+    id: 1604856376718-1
+    author: Ar2r (generated)
+    changes:
+    - addNotNullConstraint:
+        columnDataType: boolean
+        columnName: c_is_active
+        tableName: t_users
+        validate: true
+- changeSet:
+    id: 1604856376718-2
+    author: Ar2r (generated)
+    changes:
+    - addNotNullConstraint:
+        columnDataType: varchar(255)
+        columnName: c_password
+        tableName: t_users
+        validate: true
+

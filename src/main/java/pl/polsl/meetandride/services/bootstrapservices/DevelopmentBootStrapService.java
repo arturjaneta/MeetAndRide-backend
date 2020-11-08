@@ -1,5 +1,6 @@
 package pl.polsl.meetandride.services.bootstrapservices;
 
+import pl.polsl.meetandride.DTOs.RegisterDTO;
 import pl.polsl.meetandride.entities.User;
 import pl.polsl.meetandride.enums.BootStrapLabel;
 import pl.polsl.meetandride.exceptions.EmailAlreadyTakenException;
@@ -28,13 +29,13 @@ public class DevelopmentBootStrapService extends BootStrapService {
     private void createDevelopAdmin() {
 
         log.info("Creating default development admin account...");
-        User user = new User(
-                "admin@admin.pl", bCryptPasswordEncoder.encode("admin"),
-                "Admin", "Adminsson",
-                true, "123456789",null
-        );
+        RegisterDTO registerDTO = new RegisterDTO();
+        registerDTO.setEmail("a@a.pl");
+        registerDTO.setFirstName("Admin");
+        registerDTO.setLastName("Admin");
+        registerDTO.setPassword("admin");
         try {
-            userService.addUser(user);
+            userService.registerNewUser(registerDTO);
             log.info("Created.");
         } catch (EmailAlreadyTakenException e) {
             log.info("User with default e-mail already present. Skipping.");

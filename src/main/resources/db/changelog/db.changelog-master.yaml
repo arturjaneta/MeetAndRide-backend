@@ -9,3 +9,5 @@ databaseChangeLog:
       file: db\changelog\changelog-2020-10-22T17-51-10Z.yml
   - include:
       file: db\changelog\changelog-2020-10-26T20-45-34Z.yml
+  - include:
+      file: db\changelog\changelog-2020-11-08T17-26-07Z.yml
