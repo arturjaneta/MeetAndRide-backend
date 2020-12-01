@@ -2,11 +2,13 @@ package pl.polsl.meetandride.entities;
 
 import lombok.Getter;
 import lombok.Setter;
+import pl.polsl.meetandride.DTOs.WaypointDTO;
 import pl.polsl.meetandride.enums.Speed;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -33,8 +35,8 @@ public class Trip extends DatedEntity
     @Column(name = "to_place", nullable = false)
     private String toPlace;
 
-    @Column(name = "trace", nullable = false)
-    private String trace;
+    @OneToMany(mappedBy = "trip")
+    private List<Waypoint> waypoints;
 
     @Column(name = "speed", nullable = false)
     private Speed speed;
@@ -51,7 +53,7 @@ public class Trip extends DatedEntity
     )
     private Set<User> participants = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "author")
+    @OneToMany(mappedBy = "trip")
     private Set<ChatEntry> chatEntries = new LinkedHashSet<>();
 
 }

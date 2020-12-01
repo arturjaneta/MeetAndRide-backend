@@ -1,0 +1,52 @@
+databaseChangeLog:
+- changeSet:
+    id: 1606766501445-1
+    author: Ar2r (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: t_waypointsPK
+            name: c_id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: c_lat
+            type: FLOAT8
+        - column:
+            constraints:
+              nullable: false
+            name: c_lng
+            type: FLOAT8
+        - column:
+            constraints:
+              nullable: false
+            name: c_trip
+            type: BIGINT
+        tableName: t_waypoints
+- changeSet:
+    id: 1606766501445-2
+    author: Ar2r (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: c_trip
+        baseTableName: t_waypoints
+        constraintName: FK85onnotl4h4hjyhbgigqg7dyp
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: c_id
+        referencedTableName: t_trips
+        validate: true
+- changeSet:
+    id: 1606766501445-3
+    author: Ar2r (generated)
+    changes:
+    - dropColumn:
+        columnName: c_trace
+        tableName: t_trips
+

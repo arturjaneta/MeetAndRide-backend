@@ -81,7 +81,7 @@ public class UserService {
         return user;
     }
 
-    private User getCurrentUser(){
+    public User getCurrentUser(){
         return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
@@ -96,5 +96,34 @@ public class UserService {
         }
     }
 
+    public void changePassword(String password) {
+        User user = getCurrentUser();
+        user.setPassword(bCryptPasswordEncoder.encode(password));
+        userRepository.save(user);
+    }
 
+
+    public void changeName(String firstName, String lastName) {
+        User user = getCurrentUser();
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        userRepository.save(user);
+    }
+
+    public void saveAll(List<UserDTO> data) {
+        List<User> users = data.stream().map(userDTO ->{
+            User user = findById(userDTO.getId());
+            user.setFirstName(userDTO.getFirstName());
+            user.setLastName(userDTO.getLastName());
+            user.setAdmin(userDTO.isAdmin());
+            user.setActive(userDTO.isActive());
+            return user;
+        }).collect(Collectors.toList());
+        userRepository.saveAll(users);
+    }
+
+
+    public List<UserDTO> getAllByTrip(Long id) {
+        return userRepository.findAllByTripsAsParticipant_Id(id).stream().map(user -> toDTO(user)).collect(Collectors.toList());
+    }
 }

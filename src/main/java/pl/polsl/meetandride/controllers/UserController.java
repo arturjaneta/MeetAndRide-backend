@@ -18,21 +18,40 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
-    @PostMapping
+    @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public void register(@RequestBody RegisterDTO data){
         userService.registerNewUser(data);
     }
 
+    @PostMapping("/saveall")
+    public void saveAll(@RequestBody List<UserDTO> data){
+        userService.saveAll(data);
+    }
 
     @PutMapping
     public UserDTO edit(@RequestBody @Valid UserDTO userDTO) {
         return userService.edit(userDTO);
     }
 
+    @PatchMapping
+    public void changePassword(String password) {
+        userService.changePassword(password);
+    }
+
+    @PatchMapping("/name")
+    public void changeName(@RequestParam String firstName,@RequestParam String lastName) {
+        userService.changeName(firstName,lastName);
+    }
+
     @GetMapping("/getall")
     public List<UserDTO> getAll() {
         return userService.getAll();
+    }
+
+    @GetMapping("/getall/trip")
+    public List<UserDTO> getAllByTrip(@RequestParam Long id) {
+        return userService.getAllByTrip(id);
     }
 
     @GetMapping

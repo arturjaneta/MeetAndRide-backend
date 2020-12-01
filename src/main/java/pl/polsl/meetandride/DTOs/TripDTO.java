@@ -6,6 +6,7 @@ import pl.polsl.meetandride.enums.Speed;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 public class TripDTO {
@@ -22,10 +23,10 @@ public class TripDTO {
     private String fromPlace;
     @NotEmpty
     private String toPlace;
-    @NotEmpty
-    private String trace;
+
+    private List<WaypointDTO> waypoints;
     @NotNull
     private Speed speed;
-    @NotNull
+
     private Long ownerId;
 }

@@ -13,4 +13,5 @@ public interface UserRepository extends CrudRepository<User, Long>, PagingAndSor
     Optional<User> findByEmail(String email);
     boolean existsByEmail(String email);
     List<User> findAll();
+    List<User> findAllByTripsAsParticipant_Id(Long id);
 }
