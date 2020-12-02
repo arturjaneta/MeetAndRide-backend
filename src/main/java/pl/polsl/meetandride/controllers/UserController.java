@@ -1,8 +1,10 @@
 package pl.polsl.meetandride.controllers;
 
 
+import pl.polsl.meetandride.DTOs.MotorcycleDTO;
 import pl.polsl.meetandride.DTOs.RegisterDTO;
 import pl.polsl.meetandride.DTOs.UserDTO;
+import pl.polsl.meetandride.entities.Motorcycle;
 import pl.polsl.meetandride.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -42,6 +44,16 @@ public class UserController {
     @PatchMapping("/name")
     public void changeName(@RequestParam String firstName,@RequestParam String lastName) {
         userService.changeName(firstName,lastName);
+    }
+
+    @GetMapping("/getcurrent")
+    public UserDTO getCurrent() {
+        return userService.getCurrent();
+    }
+
+    @GetMapping("/getmotorcycles")
+    public List<MotorcycleDTO> getCurrentUserMotorcycles() {
+        return userService.getMotorcycles();
     }
 
     @GetMapping("/getall")

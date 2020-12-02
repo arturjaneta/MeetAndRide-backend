@@ -123,6 +123,7 @@ public class TripService {
 
     public List<TripDTO> getAll(FindTripDTO findTripDTO) {
         List<Trip> trips = tripRepository.findAll();
+        trips.removeIf(trip -> !trip.getOwner().isActive());
         if (findTripDTO.getDate() != null) {
             if (findTripDTO.getDate() == 0) {
                 trips.removeIf(trip -> trip.getFromDate().isBefore(LocalDateTime.now().plusDays(30)));

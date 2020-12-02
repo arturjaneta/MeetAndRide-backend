@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -28,6 +30,9 @@ public class Motorcycle extends BaseEntity{
 
     @Column(name = "registration_number", nullable = false)
     private String registrationNumber;
+
+    @OneToMany(mappedBy = "motorcycle",cascade = CascadeType.REMOVE)
+    private Set<ParticipantMotorcycle> participantMotorcycles = new LinkedHashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "owner", referencedColumnName = "id", nullable = false)

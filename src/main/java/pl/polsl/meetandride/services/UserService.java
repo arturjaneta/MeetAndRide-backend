@@ -1,6 +1,7 @@
 package pl.polsl.meetandride.services;
 
 import org.springframework.security.core.context.SecurityContextHolder;
+import pl.polsl.meetandride.DTOs.MotorcycleDTO;
 import pl.polsl.meetandride.DTOs.RegisterDTO;
 import pl.polsl.meetandride.DTOs.UserDTO;
 import pl.polsl.meetandride.entities.User;
@@ -125,5 +126,24 @@ public class UserService {
 
     public List<UserDTO> getAllByTrip(Long id) {
         return userRepository.findAllByTripsAsParticipant_Id(id).stream().map(user -> toDTO(user)).collect(Collectors.toList());
+    }
+
+    public UserDTO getCurrent() {
+        return toDTO(getCurrentUser());
+    }
+
+    public List<MotorcycleDTO> getMotorcycles() {
+        User user = getCurrentUser();
+        return user.getMotorcycles().stream().map(motorcycle -> {
+            MotorcycleDTO motorcycleDTO = new MotorcycleDTO();
+            motorcycleDTO.setId(motorcycle.getId());
+            motorcycleDTO.setBrandName(motorcycle.getBrandName());
+            motorcycleDTO.setModelName(motorcycle.getModelName());
+            motorcycleDTO.setCapacity(motorcycle.getCapacity());
+            motorcycleDTO.setPower(motorcycle.getPower());
+            motorcycleDTO.setRegistrationNumber(motorcycle.getRegistrationNumber());
+            motorcycleDTO.setYear(motorcycle.getYear());
+            return motorcycleDTO;
+        }).collect(Collectors.toList());
     }
 }

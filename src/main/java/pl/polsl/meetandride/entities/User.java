@@ -40,11 +40,14 @@ public class User extends DatedEntity implements UserDetails {
     @Column(name = "is_admin", nullable = false)
     private boolean isAdmin = false;
 
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "owner",fetch = FetchType.EAGER)
     private Set<Motorcycle> motorcycles = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "author")
     private Set<ChatEntry> chatEntries = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE)
+    private Set<ParticipantMotorcycle> participantMotorcycles = new LinkedHashSet<>();
 
     @ManyToMany(mappedBy = "participants")
     private Set<Trip> tripsAsParticipant = new LinkedHashSet<>();

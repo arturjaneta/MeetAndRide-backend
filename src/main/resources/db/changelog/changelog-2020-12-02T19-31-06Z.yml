@@ -1,0 +1,71 @@
+databaseChangeLog:
+- changeSet:
+    id: 1606937475608-1
+    author: Ar2r (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: t_participants_motorcyclesPK
+            name: c_id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: c_motorcycle
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: c_trip
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: c_user
+            type: BIGINT
+        tableName: t_participants_motorcycles
+- changeSet:
+    id: 1606937475608-2
+    author: Ar2r (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: c_trip
+        baseTableName: t_participants_motorcycles
+        constraintName: FK19ph1fb36rj7bxwuyhc8dwf05
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: c_id
+        referencedTableName: t_trips
+        validate: true
+- changeSet:
+    id: 1606937475608-3
+    author: Ar2r (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: c_user
+        baseTableName: t_participants_motorcycles
+        constraintName: FKk2able7rqiiuhf8klogpwki2x
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: c_id
+        referencedTableName: t_users
+        validate: true
+- changeSet:
+    id: 1606937475608-4
+    author: Ar2r (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: c_motorcycle
+        baseTableName: t_participants_motorcycles
+        constraintName: FKq0k1dm060alclc18u9ee4r9ri
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: c_id
+        referencedTableName: t_motorcycles
+        validate: true
+

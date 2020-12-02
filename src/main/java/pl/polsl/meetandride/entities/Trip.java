@@ -36,8 +36,11 @@ public class Trip extends DatedEntity
     @Column(name = "to_place", nullable = false)
     private String toPlace;
 
-    @OneToMany(mappedBy = "trip")
+    @OneToMany(mappedBy = "trip",cascade = CascadeType.REMOVE)
     private List<Waypoint> waypoints;
+
+    @OneToMany(mappedBy = "trip",cascade = CascadeType.REMOVE)
+    private Set<ParticipantMotorcycle> participantMotorcycles = new LinkedHashSet<>();
 
     @Column(name = "speed", nullable = false)
     private Speed speed;
@@ -60,7 +63,7 @@ public class Trip extends DatedEntity
     )
     private Set<User> participants = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "trip")
+    @OneToMany(mappedBy = "trip",cascade = CascadeType.REMOVE)
     private Set<ChatEntry> chatEntries = new LinkedHashSet<>();
 
 }

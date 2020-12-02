@@ -38,6 +38,11 @@ public class JwtUsernamePasswordAuthenticationFilter extends UsernamePasswordAut
 
             User authenticatedUser = (User) jwtUserDetailsService.loadUserByUsername(authenticationRequest.getUsername());
 
+            if(!authenticatedUser.isActive()) {
+                throw new AuthenticationException("Your account is banned!") {
+                };
+            }
+
             return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     authenticatedUser, authenticationRequest.getPassword()
             ));
