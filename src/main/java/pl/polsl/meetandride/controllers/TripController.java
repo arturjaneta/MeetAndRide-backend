@@ -2,7 +2,11 @@ package pl.polsl.meetandride.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import pl.polsl.meetandride.DTOs.FindTripDTO;
 import pl.polsl.meetandride.DTOs.TripDTO;
+import pl.polsl.meetandride.DTOs.WaypointDTO;
+import pl.polsl.meetandride.enums.Speed;
+import pl.polsl.meetandride.enums.Tags;
 import pl.polsl.meetandride.services.TripService;
 
 import javax.validation.Valid;
@@ -12,6 +16,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/trip")
+@CrossOrigin
 public class TripController {
 
     private final TripService tripService;
@@ -37,9 +42,9 @@ public class TripController {
         return tripService.getById(id);
     }
 
-    @GetMapping("/all")
-    public List<TripDTO> getAll(@RequestParam String date,@RequestParam String range,@RequestParam String speed,@RequestParam String tags) {
-        return tripService.getAll(date,range,speed,tags);
+    @PostMapping("/all")
+    public List<TripDTO> getAll(@RequestBody FindTripDTO findTripDTO) {
+        return tripService.getAll(findTripDTO);
     }
 
     @GetMapping("/mytrips")

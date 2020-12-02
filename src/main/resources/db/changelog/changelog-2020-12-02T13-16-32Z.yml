@@ -1,0 +1,34 @@
+databaseChangeLog:
+- changeSet:
+    id: 1606915001546-1
+    author: Ar2r (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: c_trip_id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: c_tags
+            type: INTEGER
+        tableName: t_tags_table
+- changeSet:
+    id: 1606915001546-2
+    author: Ar2r (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: c_trip_id
+        baseTableName: t_tags_table
+        constraintName: FKhxb0ce9fgq4yy64wx32u9slca
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: c_id
+        referencedTableName: t_trips
+        validate: true
+

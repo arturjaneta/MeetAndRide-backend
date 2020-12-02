@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import pl.polsl.meetandride.DTOs.WaypointDTO;
 import pl.polsl.meetandride.enums.Speed;
+import pl.polsl.meetandride.enums.Tags;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -40,6 +41,12 @@ public class Trip extends DatedEntity
 
     @Column(name = "speed", nullable = false)
     private Speed speed;
+
+    @ElementCollection(targetClass = Tags.class)
+    @JoinTable(name = "tags_table", joinColumns = @JoinColumn(name = "trip_id"))
+    @Column(name = "tags", nullable = false)
+    @Enumerated(EnumType.ORDINAL)
+    private Set<Tags> tags = new LinkedHashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "owner", referencedColumnName = "id", nullable = false)

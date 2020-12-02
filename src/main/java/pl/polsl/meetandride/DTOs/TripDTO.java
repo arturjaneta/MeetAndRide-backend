@@ -2,6 +2,7 @@ package pl.polsl.meetandride.DTOs;
 
 import lombok.Data;
 import pl.polsl.meetandride.enums.Speed;
+import pl.polsl.meetandride.enums.Tags;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -27,6 +28,9 @@ public class TripDTO {
     private List<WaypointDTO> waypoints;
     @NotNull
     private Speed speed;
+
+    @NotNull
+    private List<Tags> tags;
 
     private Long ownerId;
 }

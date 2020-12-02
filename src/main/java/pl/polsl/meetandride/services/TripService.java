@@ -2,7 +2,7 @@ package pl.polsl.meetandride.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
+import pl.polsl.meetandride.DTOs.FindTripDTO;
 import pl.polsl.meetandride.DTOs.TripDTO;
 import pl.polsl.meetandride.DTOs.WaypointDTO;
 import pl.polsl.meetandride.entities.Trip;
@@ -27,15 +27,16 @@ public class TripService {
     public TripDTO add(TripDTO tripDTO) {
         tripDTO.setOwnerId(userService.getCurrentUser().getId());
         Trip trip = tripRepository.save(toEntity(tripDTO));
-        trip.setWaypoints(tripDTO.getWaypoints().stream().map(waypointDTO -> waypointRepository.save(new Waypoint(waypointDTO.getLat(),waypointDTO.getLng(),trip))).collect(Collectors.toList()));
+        trip.setWaypoints(tripDTO.getWaypoints().stream().map(waypointDTO -> waypointRepository.save(new Waypoint(waypointDTO.getLat(), waypointDTO.getLng(), trip))).collect(Collectors.toList()));
         trip.getParticipants().add(userService.getCurrentUser());
         return toDTO(trip);
     }
 
     public TripDTO edit(TripDTO tripDTO) {
         Trip trip = findById(tripDTO.getId());
-        fillEntityWithDtoData(trip,tripDTO);
-        trip.setWaypoints(tripDTO.getWaypoints().stream().map(waypointDTO -> waypointRepository.save(new Waypoint(waypointDTO.getLat(),waypointDTO.getLng(),trip))).collect(Collectors.toList()));
+        trip.getWaypoints().forEach(waypoint -> waypointRepository.delete(waypoint));
+        fillEntityWithDtoData(trip, tripDTO);
+        trip.setWaypoints(tripDTO.getWaypoints().stream().map(waypointDTO -> waypointRepository.save(new Waypoint(waypointDTO.getLat(), waypointDTO.getLng(), trip))).collect(Collectors.toList()));
         trip.setUpdateDateTime(LocalDateTime.now());
         return toDTO(tripRepository.save(trip));
     }
@@ -56,7 +57,7 @@ public class TripService {
             throw new ResourceNotFoundException("Trip with id: " + id + " not exists in DB!");
     }
 
-    private TripDTO toDTO(Trip trip){
+    private TripDTO toDTO(Trip trip) {
         TripDTO tripDTO = new TripDTO();
         tripDTO.setId(trip.getId());
         tripDTO.setTitle(trip.getTitle());
@@ -65,19 +66,20 @@ public class TripService {
         tripDTO.setToDate(trip.getToDate());
         tripDTO.setFromPlace(trip.getFromPlace());
         tripDTO.setToPlace(trip.getToPlace());
-        tripDTO.setWaypoints(trip.getWaypoints().stream().map(waypoint -> new WaypointDTO(waypoint.getLat(),waypoint.getLat())).collect(Collectors.toList()));
+        tripDTO.setWaypoints(trip.getWaypoints().stream().map(waypoint -> new WaypointDTO(waypoint.getLat(), waypoint.getLng())).collect(Collectors.toList()));
         tripDTO.setSpeed(trip.getSpeed());
         tripDTO.setOwnerId(trip.getOwner().getId());
+        tripDTO.setTags(trip.getTags().stream().collect(Collectors.toList()));
         return tripDTO;
     }
 
-    private Trip toEntity(TripDTO tripDTO){
+    private Trip toEntity(TripDTO tripDTO) {
         Trip trip = new Trip();
-        fillEntityWithDtoData(trip,tripDTO);
+        fillEntityWithDtoData(trip, tripDTO);
         return trip;
     }
 
-    private void fillEntityWithDtoData(Trip trip,TripDTO tripDTO){
+    private void fillEntityWithDtoData(Trip trip, TripDTO tripDTO) {
         trip.setTitle(tripDTO.getTitle());
         trip.setDescription(tripDTO.getDescription());
         trip.setFromDate(tripDTO.getFromDate());
@@ -85,6 +87,7 @@ public class TripService {
         trip.setFromPlace(tripDTO.getFromPlace());
         trip.setToPlace(tripDTO.getToPlace());
         trip.setSpeed(tripDTO.getSpeed());
+        trip.setTags(tripDTO.getTags().stream().collect(Collectors.toSet()));
         trip.setOwner(userService.findById(tripDTO.getOwnerId()));
     }
 
@@ -98,7 +101,68 @@ public class TripService {
         tripRepository.save(trip);
     }
 
-    public List<TripDTO> getAll(String date, String range, String speed,  String tags) {
-        return tripRepository.findAll().stream().map(trip -> toDTO(trip)).collect(Collectors.toList());
+//    public List<TripDTO> getAll(String date, String range, String speed,  String tags) {
+//        return tripRepository.findAll().stream().map(trip -> toDTO(trip)).collect(Collectors.toList());
+//    }
+
+    public long distance(double lat1, double lng1, double lat2, double lng2) {
+        int R = 6371000; // metres
+        double temp1 = lat1 * Math.PI / 180; // φ, λ in radians
+        double temp2 = lat2 * Math.PI / 180;
+        double temp3 = (lat2 - lat1) * Math.PI / 180;
+        double temp4 = (lng2 - lng1) * Math.PI / 180;
+
+        double a = Math.sin(temp3 / 2) * Math.sin(temp3 / 2) +
+                Math.cos(temp1) * Math.cos(temp2) *
+                        Math.sin(temp4 / 2) * Math.sin(temp4 / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        double d = R * c; // in metres
+        return (long) d;
+    }
+
+    public List<TripDTO> getAll(FindTripDTO findTripDTO) {
+        List<Trip> trips = tripRepository.findAll();
+        if (findTripDTO.getDate() != null) {
+            if (findTripDTO.getDate() == 0) {
+                trips.removeIf(trip -> trip.getFromDate().isBefore(LocalDateTime.now().plusDays(30)));
+            } else {
+                trips.removeIf(trip -> trip.getFromDate().isAfter(LocalDateTime.now().plusDays(findTripDTO.getDate())) || trip.getFromDate().isBefore(LocalDateTime.now()));
+            }
+        }
+        if (findTripDTO.getRange() != null && findTripDTO.getLocation()!=null) {
+            if(findTripDTO.getRange()==0)
+                trips.removeIf(trip -> {
+                            if(trip.getWaypoints().size()<1)
+                                return true;
+                            else
+                            return 50000 > distance(
+                                    trip.getWaypoints().get(0).getLat(),
+                                    trip.getWaypoints().get(0).getLng(),
+                                    findTripDTO.getLocation().getLat(),
+                                    findTripDTO.getLocation().getLng());
+                        }
+                );
+            else
+                trips.removeIf(trip -> {
+                    if (trip.getWaypoints().size() < 1)
+                        return true;
+                    else
+                        return findTripDTO.getRange() < distance(
+                                trip.getWaypoints().get(0).getLat(),
+                                trip.getWaypoints().get(0).getLng(),
+                                findTripDTO.getLocation().getLat(),
+                                findTripDTO.getLocation().getLng());
+                }
+                );
+
+        }
+        if (findTripDTO.getSpeed() != null) {
+            trips.removeIf(trip -> !findTripDTO.getSpeed().contains(trip.getSpeed()));
+        }
+        if (findTripDTO.getTags() != null) {
+            trips.removeIf(trip -> !trip.getTags().containsAll(findTripDTO.getTags()));
+        }
+        return trips.stream().map(trip -> toDTO(trip)).collect(Collectors.toList());
     }
 }
