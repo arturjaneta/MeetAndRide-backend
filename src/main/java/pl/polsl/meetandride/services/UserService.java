@@ -4,9 +4,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import pl.polsl.meetandride.DTOs.MotorcycleDTO;
 import pl.polsl.meetandride.DTOs.RegisterDTO;
 import pl.polsl.meetandride.DTOs.UserDTO;
+import pl.polsl.meetandride.entities.Motorcycle;
 import pl.polsl.meetandride.entities.User;
 import pl.polsl.meetandride.exceptions.EmailAlreadyTakenException;
 import pl.polsl.meetandride.exceptions.ResourceNotFoundException;
+import pl.polsl.meetandride.repositories.MotorcycleRepository;
 import pl.polsl.meetandride.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,6 +27,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final MotorcycleRepository motorcycleRepository;
 
     public User registerNewUser(RegisterDTO data) {
         if (userRepository.existsByEmail(data.getEmail()))
@@ -145,5 +148,17 @@ public class UserService {
             motorcycleDTO.setYear(motorcycle.getYear());
             return motorcycleDTO;
         }).collect(Collectors.toList());
+    }
+
+    public void addMotorcycle(MotorcycleDTO motorcycleDTO) {
+        Motorcycle motorcycle = new Motorcycle();
+        motorcycle.setOwner(getCurrentUser());
+        motorcycle.setBrandName(motorcycleDTO.getBrandName());
+        motorcycle.setModelName(motorcycleDTO.getModelName());
+        motorcycle.setPower(motorcycleDTO.getPower());
+        motorcycle.setCapacity(motorcycleDTO.getCapacity());
+        motorcycle.setRegistrationNumber(motorcycleDTO.getRegistrationNumber());
+        motorcycle.setYear(motorcycleDTO.getYear());
+        motorcycleRepository.save(motorcycle);
     }
 }

@@ -31,6 +31,11 @@ public class UserController {
         userService.saveAll(data);
     }
 
+    @PostMapping("/addmotorcycle")
+    public void addMotorcycle(@RequestBody MotorcycleDTO motorcycleDTO){
+        userService.addMotorcycle(motorcycleDTO);
+    }
+
     @PutMapping
     public UserDTO edit(@RequestBody @Valid UserDTO userDTO) {
         return userService.edit(userDTO);

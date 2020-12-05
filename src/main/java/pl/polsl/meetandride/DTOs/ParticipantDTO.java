@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class ParticipantDTO {
+    private long userId;
     private String firstName;
     private String lastName;
     private MotorcycleDTO motorcycleDTO;

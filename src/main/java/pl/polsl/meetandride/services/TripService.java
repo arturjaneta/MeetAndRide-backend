@@ -2,12 +2,13 @@ package pl.polsl.meetandride.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.polsl.meetandride.DTOs.FindTripDTO;
-import pl.polsl.meetandride.DTOs.TripDTO;
-import pl.polsl.meetandride.DTOs.WaypointDTO;
+import pl.polsl.meetandride.DTOs.*;
+import pl.polsl.meetandride.entities.ParticipantMotorcycle;
 import pl.polsl.meetandride.entities.Trip;
 import pl.polsl.meetandride.entities.Waypoint;
 import pl.polsl.meetandride.exceptions.ResourceNotFoundException;
+import pl.polsl.meetandride.repositories.MotorcycleRepository;
+import pl.polsl.meetandride.repositories.ParticipantMotorcycleRepository;
 import pl.polsl.meetandride.repositories.TripRepository;
 import pl.polsl.meetandride.repositories.WaypointRepository;
 
@@ -23,6 +24,8 @@ public class TripService {
     private final TripRepository tripRepository;
     private final UserService userService;
     private final WaypointRepository waypointRepository;
+    private final MotorcycleRepository motorcycleRepository;
+    private final ParticipantMotorcycleRepository participantMotorcycleRepository;
 
     public TripDTO add(TripDTO tripDTO) {
         tripDTO.setOwnerId(userService.getCurrentUser().getId());
@@ -95,9 +98,14 @@ public class TripService {
         return tripRepository.findAllByOwner(userService.getCurrentUser()).stream().map(trip -> toDTO(trip)).collect(Collectors.toList());
     }
 
-    public void addUserToTrip(Long id) {
+    public void addUserToTrip(Long id,Long motorcycleId) {
         Trip trip = findById(id);
         trip.getParticipants().add(userService.getCurrentUser());
+        ParticipantMotorcycle participantMotorcycle = new ParticipantMotorcycle();
+        participantMotorcycle.setUser(userService.getCurrentUser());
+        participantMotorcycle.setMotorcycle(motorcycleRepository.findById(motorcycleId).orElseThrow(()->new ResourceNotFoundException("Motorcycle with id:" + motorcycleId + " not exists in DB!")));
+        participantMotorcycle.setTrip(trip);
+        participantMotorcycleRepository.save(participantMotorcycle);
         tripRepository.save(trip);
     }
 
@@ -165,5 +173,32 @@ public class TripService {
             trips.removeIf(trip -> !trip.getTags().containsAll(findTripDTO.getTags()));
         }
         return trips.stream().map(trip -> toDTO(trip)).collect(Collectors.toList());
+    }
+
+    public List<ParticipantDTO> getPartcipants(Long id) {
+        return participantMotorcycleRepository.findAllByTrip_Id(id).stream().map(participantMotorcycle -> {
+            ParticipantDTO participantDTO = new ParticipantDTO();
+            participantDTO.setFirstName(participantMotorcycle.getUser().getFirstName());
+            participantDTO.setUserId(participantMotorcycle.getUser().getId());
+            participantDTO.setLastName(participantMotorcycle.getUser().getLastName());
+            MotorcycleDTO motorcycleDTO = new MotorcycleDTO();
+            motorcycleDTO.setId(participantMotorcycle.getMotorcycle().getId());
+            motorcycleDTO.setYear(participantMotorcycle.getMotorcycle().getYear());
+            motorcycleDTO.setRegistrationNumber(participantMotorcycle.getMotorcycle().getRegistrationNumber());
+            motorcycleDTO.setPower(participantMotorcycle.getMotorcycle().getPower());
+            motorcycleDTO.setCapacity(participantMotorcycle.getMotorcycle().getCapacity());
+            motorcycleDTO.setModelName(participantMotorcycle.getMotorcycle().getModelName());
+            motorcycleDTO.setBrandName(participantMotorcycle.getMotorcycle().getBrandName());
+            participantDTO.setMotorcycleDTO(motorcycleDTO);
+            return participantDTO;
+        }).collect(Collectors.toList());
+    }
+
+    public void removeUserFromTrip(Long id) {
+        List<ParticipantMotorcycle> participantMotorcycles = participantMotorcycleRepository.findAllByTrip_IdAndUser_Id(id,userService.getCurrentUser().getId());
+        Trip trip = findById(id);
+        trip.getParticipants().removeIf(user -> user.getId()==userService.getCurrentUser().getId());
+        tripRepository.save(trip);
+        participantMotorcycleRepository.deleteAll(participantMotorcycles);
     }
 }

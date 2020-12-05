@@ -3,6 +3,7 @@ package pl.polsl.meetandride.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import pl.polsl.meetandride.DTOs.FindTripDTO;
+import pl.polsl.meetandride.DTOs.ParticipantDTO;
 import pl.polsl.meetandride.DTOs.TripDTO;
 import pl.polsl.meetandride.DTOs.WaypointDTO;
 import pl.polsl.meetandride.enums.Speed;
@@ -11,6 +12,7 @@ import pl.polsl.meetandride.services.TripService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.lang.reflect.Parameter;
 import java.util.List;
 
 @RestController
@@ -33,8 +35,13 @@ public class TripController {
     }
 
     @PatchMapping
-    public void addUserToTrip(@RequestParam Long id) {
-        tripService.addUserToTrip(id);
+    public void addUserToTrip(@RequestParam Long id,@RequestParam Long motorcycleId) {
+        tripService.addUserToTrip(id,motorcycleId);
+    }
+
+    @PatchMapping("/remove")
+    public void removeUserFromTrip(@RequestParam Long id) {
+        tripService.removeUserFromTrip(id);
     }
 
     @GetMapping
@@ -50,6 +57,11 @@ public class TripController {
     @GetMapping("/mytrips")
     public List<TripDTO> getMyTrips() {
         return tripService.getMyTrips();
+    }
+
+    @GetMapping("/participants")
+    public List<ParticipantDTO> getParticipants(@RequestParam @NotNull Long id) {
+        return tripService.getPartcipants(id);
     }
 
     @DeleteMapping
