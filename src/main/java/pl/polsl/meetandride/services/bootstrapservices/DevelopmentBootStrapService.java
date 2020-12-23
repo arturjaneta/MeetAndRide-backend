@@ -12,7 +12,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Slf4j
-@Profile("development")
 @Service
 @RequiredArgsConstructor
 public class DevelopmentBootStrapService extends BootStrapService {

@@ -109,13 +109,11 @@ public class TripService {
         tripRepository.save(trip);
     }
 
-//    public List<TripDTO> getAll(String date, String range, String speed,  String tags) {
-//        return tripRepository.findAll().stream().map(trip -> toDTO(trip)).collect(Collectors.toList());
-//    }
+
 
     public long distance(double lat1, double lng1, double lat2, double lng2) {
         int R = 6371000; // metres
-        double temp1 = lat1 * Math.PI / 180; // φ, λ in radians
+        double temp1 = lat1 * Math.PI / 180;
         double temp2 = lat2 * Math.PI / 180;
         double temp3 = (lat2 - lat1) * Math.PI / 180;
         double temp4 = (lng2 - lng1) * Math.PI / 180;
